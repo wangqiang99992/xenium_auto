@@ -1,0 +1,26 @@
+#!/bin/bash
+
+echo "作者：浩哥"
+echo "推特: https://twitter.com/wangdan55263229"
+echo ""
+
+echo "正在下载挖矿程序..."
+sudo git clone https://github.com/jacklevin74/xenminer
+
+cd xenminer
+
+echo "安装挖矿程序依赖..."
+pip install -U -r requirements.txt
+
+echo "提示输入钱包地址："
+read -p "请输入您的钱包地址: " wallet_address
+
+# 替换config.conf中的钱包地址
+sed -i "s/account = .*/account = $wallet_address/" config.conf
+
+# 生成包含日期和时间的日志文件名
+log_file="miner_log_$(date +'%Y%m%d_%H%M%S').txt"
+
+echo "运行挖矿程序..."
+nohup python3 miner.py > "$log_file" 2>&1 &
+echo "挖矿程序已在后台开始运行，日志被记录在 $log_file 中。"
