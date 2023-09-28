@@ -1,8 +1,21 @@
 #!/bin/bash
 
+echo "                _                 "
+echo "__  _____ _ __ (_)_   _ _ __ ___  "
+echo "\ \/ / _ \ '_ \| | | | | '_ \` _ \ "
+echo " >  <  __/ | | | | |_| | | | | | |"
+echo "/_/\_\___|_| |_|_|\__,_|_| |_| |_|"
+echo "                                  "
+
 echo "作者：浩哥"
 echo "推特: https://twitter.com/wangdan55263229"
 echo ""
+
+wallet_address=$1
+if [ -z "$wallet_address" ]; then
+    echo "提示输入钱包地址："
+    read -p "请输入您的钱包地址: " wallet_address
+fi
 
 echo "正在下载挖矿程序..."
 sudo git clone https://github.com/jacklevin74/xenminer
@@ -12,15 +25,15 @@ cd xenminer
 echo "安装挖矿程序依赖..."
 pip install -U -r requirements.txt
 
-echo "提示输入钱包地址："
-read -p "请输入您的钱包地址: " wallet_address
-
 # 替换config.conf中的钱包地址
 sed -i "s/account = .*/account = $wallet_address/" config.conf
 
-# 生成包含日期和时间的日志文件名
-log_file="miner_log_$(date +'%Y%m%d_%H%M%S').txt"
+current_time=$(date "+%Y%m%d_%H%M%S")
+log_file="miner_log_$current_time.txt"
 
 echo "运行挖矿程序..."
 nohup python3 miner.py > "$log_file" 2>&1 &
-echo "挖矿程序已在后台开始运行，日志被记录在 $log_file 中。"
+
+echo -e "\033[1;32m挖矿程序已在后台开始运行，日志被记录在 $log_file 中。\033[0m"
+echo -e "\033[1;34m使用命令 cat $log_file 就可以查看日志文件。\033[0m"
+echo -e "\033[1;35m你的钱包地址是：$wallet_address\033[0m"
