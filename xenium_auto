@@ -29,7 +29,7 @@ pip install -U -r requirements.txt
 sed -i "s/account = .*/account = $wallet_address/" config.conf
 
 current_time=$(date "+%Y%m%d_%H%M%S")
-log_file="miner_log_$current_time.txt"
+log_file="/root/miner_log_$current_time.txt"
 
 echo "运行挖矿程序..."
 nohup python3 miner.py > "$log_file" 2>&1 &
